@@ -30,9 +30,9 @@ class CourseDetailsViewModel(
     private fun loadCourse() {
         viewModelScope.launch {
             try {
-                val courses = repository.getCourses()
+                val result = repository.getCourses()
 
-                val course = courses.find {
+                val course = result.courses.find {
                     it.id == courseId
                 }
 

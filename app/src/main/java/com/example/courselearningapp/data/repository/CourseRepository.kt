@@ -2,6 +2,7 @@ package com.example.courselearningapp.data.repository
 
 import com.example.courselearningapp.data.local.dao.CourseDao
 import com.example.courselearningapp.data.model.Course
+import com.example.courselearningapp.data.model.CourseResult
 import com.example.courselearningapp.data.model.Lesson
 import com.example.courselearningapp.data.remote.MockCourseApi
 
@@ -10,21 +11,20 @@ class CourseRepository(
     private val dao: CourseDao
 ) {
 
-    suspend fun getCourses(): List<Course> {
-
+    suspend fun getCourses(): CourseResult {
         return try {
-            // Try API first
             val courses = api.getCourses()
-
-            // Save latest data locally
             saveCoursesToDatabase(courses)
 
-            courses
-
+            CourseResult(
+                courses = courses,
+                isOffline = false
+            )
         } catch (e: Exception) {
-
-            // API failed → use local database
-            getCoursesFromDatabase()
+            CourseResult(
+                courses = getCoursesFromDatabase(),
+                isOffline = true
+            )
         }
     }
 

@@ -31,15 +31,17 @@ class CourseDashboardViewModel(
 
             try {
 
-                val courses = repository.getCourses()
+                val result = repository.getCourses()
 
                 _uiState.value =
-                    if (courses.isEmpty()) {
+                    if (result.courses.isEmpty()) {
                         CourseUiState.Empty
                     } else {
-                        CourseUiState.Success(courses)
+                        CourseUiState.Success(
+                            courses = result.courses,
+                            isOffline = result.isOffline
+                        )
                     }
-
             } catch (e: Exception) {
 
                 _uiState.value = CourseUiState.Error(

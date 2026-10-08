@@ -60,6 +60,7 @@ fun CourseDashboardScreen(
                 is CourseUiState.Success -> {
                     CourseList(
                         courses = state.courses,
+                        isOffline = state.isOffline,
                         onCourseClick = onCourseClick
                     )
                 }
@@ -80,6 +81,7 @@ fun CourseDashboardScreen(
         }
     }
 }
+
 @Composable
 private fun LoadingContent() {
     Column(
@@ -96,17 +98,34 @@ private fun LoadingContent() {
     }
 }
 
-
 @Composable
 private fun CourseList(
     courses: List<Course>,
+    isOffline: Boolean,
     onCourseClick: (Int) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            top = 8.dp,
+            bottom = 16.dp
+        ),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
+        if (isOffline) {
+            item {
+                Text(
+                    text = "You're offline. Showing cached courses.",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                )
+            }
+        }
 
         items(
             items = courses,
@@ -122,7 +141,6 @@ private fun CourseList(
         }
     }
 }
-
 
 @Composable
 private fun CourseCard(
@@ -180,7 +198,6 @@ private fun CourseCard(
         }
     }
 }
-
 
 @Composable
 private fun EmptyContent(

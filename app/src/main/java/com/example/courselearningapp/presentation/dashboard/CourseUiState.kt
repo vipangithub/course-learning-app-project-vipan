@@ -7,7 +7,8 @@ sealed interface CourseUiState {
     data object Loading : CourseUiState
 
     data class Success(
-        val courses: List<Course>
+        val courses: List<Course>,
+        val isOffline: Boolean = false
     ) : CourseUiState
 
     data object Empty : CourseUiState
